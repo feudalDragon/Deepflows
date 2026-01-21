@@ -227,6 +227,15 @@ A: This is the most common issue in deep learning. Carefully check the parameter
 **Q: Page says "Network Error"?**
 A: Check if the backend `server.py` is running and port `8000` is not blocked by a firewall.
 
-## Contribution & Contact
+## Contributors
 
-Issues / PRs are welcome. You can start by fixing documentation, adding test cases, or improving backend implementation.
+<a href="https://github.com/Ch0ser">
+  <img src="https://github.com/Ch0ser.png" width="60px;" alt="Ch0ser"/>
+</a>
+<a href="https://github.com/iJcher">
+  <img src="https://github.com/iJcher.png" width="60px;" alt="iJcher"/>
+</a>
+
+## Contribution and Contact
+
+Welcome to submit Issues / PRs. You can start by fixing documentation, adding test cases, or improving backend implementation.

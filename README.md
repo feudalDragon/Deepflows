@@ -227,6 +227,15 @@ A: 这是深度学习中最常见的问题。请仔细检查 Model Builder 中�
 **Q: 页面提示 "Network Error"？**
 A: 请检查后端 `server.py` 是否正在运行，且端口 `8000` 未被防火墙拦截。
 
+## 贡献者
+
+<a href="https://github.com/Ch0ser">
+  <img src="https://github.com/Ch0ser.png" width="60px;" alt="Ch0ser"/>
+</a>
+<a href="https://github.com/iJcher">
+  <img src="https://github.com/iJcher.png" width="60px;" alt="iJcher"/>
+</a>
+
 ## 贡献与联系
 
 欢迎提 Issue / PR。你可以先从修复文档、补充测试用例或完善后端实现开始。
