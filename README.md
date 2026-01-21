@@ -235,6 +235,9 @@ A: 请检查后端 `server.py` 是否正在运行，且端口 `8000` 未被防�
 <a href="https://github.com/iJcher">
   <img src="https://github.com/iJcher.png" width="60px;" alt="iJcher"/>
 </a>
+<a href="https://github.com/xwh12345-user">
+  <img src="https://github.com/xwh12345-user.png" width="60px;" alt="xwh12345-user"/>
+</a>
 
 ## 贡献与联系
 

@@ -235,6 +235,9 @@ A: Check if the backend `server.py` is running and port `8000` is not blocked by
 <a href="https://github.com/iJcher">
   <img src="https://github.com/iJcher.png" width="60px;" alt="iJcher"/>
 </a>
+<a href="https://github.com/xwh12345-user">
+  <img src="https://github.com/xwh12345-user.png" width="60px;" alt="xwh12345-user"/>
+</a>
 
 ## Contribution and Contact
 
