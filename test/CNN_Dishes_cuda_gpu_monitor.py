@@ -52,7 +52,7 @@ def load_dishes_data(root_dir, img_size=(32, 32)):
     x_test = np.ascontiguousarray(x_test)
     return x_train, y_train, x_test, y_test, class_names, mean_c.squeeze(), std_c.squeeze()
 
-root_dir = r"e:\P.A.R.A\Project\ComprehensiveDesign\codes\Deepflows\data\dishes"
+root_dir = r"E:\P.A.R.A\Project\ComprehensiveDesign\codes\deepflows\data\dishes"
 print(f"Loading data from {root_dir}...")
 x_train, y_train, x_test, y_test, class_names, mean_c, std_c = load_dishes_data(root_dir, img_size=(128, 128))
 num_classes = len(class_names)

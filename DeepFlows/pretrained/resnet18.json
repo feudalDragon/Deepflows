@@ -1,0 +1,7 @@
+{
+  "model_name": "resnet18",
+  "source": "pytorch",
+  "download_time": "2026-01-20 21:13:42",
+  "original_checkpoint": "PyTorch官方预训练模型: resnet18",
+  "download_path": "E:\\P.A.R.A\\Project\\ComprehensiveDesign\\codes\\deepflows\\DeepFlows\\utils\\..\\pretrained\\resnet18_pytorch_temp.pth"
+}

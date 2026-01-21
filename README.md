@@ -74,6 +74,125 @@ DeepFlows 是一个轻量级的深度学习框架教学/实验项目，包含张
     - `print(cuda().enabled())`
   - 若输出为 `True`，表示已正确加载 CUDA 后端；否则将回退为未启用状态。
 
+## 可视化平台使用指南 (DeepFlows Visualization Platform)
+
+欢迎使用 DeepFlows 可视化平台！这是一个基于 Vue 3 + FastAPI 的全栈应用，旨在通过直观的 Web 界面展示我们自研深度学习框架 `DeepFlows` 的训练过程与模型构建能力。
+
+### 🛠️ 环境准备与安装
+
+#### 1. 基础要求
+- **Python**: 3.10 或更高版本
+- **Node.js**: 16.0 或更高版本 (推荐使用 LTS)
+- **CUDA (可选)**: 如果需要 GPU 加速，请确保已安装 NVIDIA CUDA Toolkit (推荐 11.x 或 12.x)
+
+#### 2. 后端配置 (Visualization_backend)
+
+后端负责运行深度学习框架、处理训练任务和通过 WebSocket 推送实时数据。
+
+##### 步骤 1: 创建虚拟环境
+建议使用 `venv` 或 `conda` 创建隔离环境，避免污染全局 Python 环境。
+
+```powershell
+# 在项目根目录下
+python -m venv venv
+# 激活环境 (Windows)
+.\venv\Scripts\Activate.ps1
+# 激活环境 (Linux/Mac)
+source venv/bin/activate
+```
+
+##### 步骤 2: 安装依赖
+我们需要安装 FastAPI 服务相关依赖以及监控工具。
+
+```bash
+cd Visualization_backend
+pip install fastapi uvicorn[standard] websockets psutil nvidia-ml-py scikit-learn
+```
+
+> **注意**: 核心框架 `DeepFlows` 依赖于底层的 C++ 编译扩展 (`.pyd` 或 `.so`)。请确保 `DeepFlows/backend/backend_src/build/Release` 目录下已有编译好的文件，或者按照框架文档先行编译。
+
+##### 步骤 3: 启动后端服务
+```bash
+# 确保在激活的虚拟环境中
+python server.py
+```
+成功启动后，你会看到：
+- `INFO: Uvicorn running on http://0.0.0.0:8000`
+- `[System] Server starting up...`
+
+#### 3. 前端配置 (Visualization_frontend)
+
+前端提供可视化交互界面，包括仪表盘、模型构建器和训练配置。
+
+##### 步骤 1: 安装依赖
+```bash
+cd Visualization_frontend
+npm install
+```
+
+##### 步骤 2: 配置环境变量 (可选)
+默认情况下，前端会尝试连接本地 `http://127.0.0.1:8000`。如果需要修改，请编辑 `.env` 文件：
+```env
+VITE_API_URL=http://127.0.0.1:8000/api
+VITE_WS_URL=ws://127.0.0.1:8000/ws
+```
+
+##### 步骤 3: 启动前端开发服务器
+```bash
+npm run dev
+```
+浏览器访问控制台输出的地址 (通常是 `http://localhost:3000`) 即可进入系统。
+
+### 🚀 功能使用指南
+
+#### 1. 仪表盘 (Dashboard)
+- **实时监控**: 展示当前训练的 Epoch, Batch, Loss 和 Accuracy。
+- **可视化图表**:
+  - **Loss & Accuracy**: 动态折线图，实时绘制训练曲线。
+  - **Resource Usage**: 实时显示本机的 CPU、内存和 GPU (若有) 使用率。
+- **全屏模式**: 点击右上角的全屏图标，获得沉浸式体验。
+
+#### 2. 模型构建器 (Model Builder)
+这是一个“低代码”模型搭建工具，允许你通过拖拽方式设计神经网络。
+
+- **添加层**: 从左侧面板拖拽 `Conv2d`, `Linear`, `ReLU` 等层到中间画布。
+- **编辑参数**:
+  - 点击层卡片上的 **编辑图标** (✏️)。
+  - 在弹出的 JSON 编辑框中修改参数（例如修改 `in_features`, `out_features`）。
+  - **重要**: 请确保层与层之间的维度匹配（例如上一层输出 128，下一层输入必须是 128）。
+- **删除层**: 鼠标悬停在层上，点击 **删除图标** (🗑️)。
+- **保存模型**:
+  - 点击右侧的 **Save Model**。
+  - 输入自定义模型名称（如 "My MLP v1"）。
+  - 保存成功后会自动跳转到配置页面。
+
+#### 3. 训练配置 (Training Config)
+在这里配置训练超参数并启动任务。
+
+- **Model Selection**:
+  - **Default MNIST_CNN**: 系统内置的卷积神经网络。
+  - **自定义模型**: 下拉选择你在 Model Builder 中保存的模型。
+- **Dataset**: 目前支持 `MNIST` (真实数据)。`CIFAR-10` 选项暂时也会回退到 MNIST（因输入通道兼容性原因）。
+- **Hyperparameters**:
+  - **Batch Size**: 批次大小 (推荐 32 或 64)。
+  - **Epochs**: 训练轮数。
+  - **Learning Rate**: 学习率 (推荐 0.001 - 0.01)。
+  - **Optimizer**: 支持 `SGD`, `Adam`, `Adagrad`。
+- **控制**:
+  - **Start Training**: 发送配置到后端，开始训练。
+  - **Stop Training**: 强制停止当前训练任务。
+
+### 🧩 可视化平台常见问题 (FAQ)
+
+**Q: 为什么 Resource Usage 图表中 GPU 显示为 0？**
+A: 请检查是否安装了 `nvidia-ml-py` 依赖，以及本机是否拥有 NVIDIA 显卡并正确安装了驱动。如果没有 GPU，后端会自动忽略并显示 0。
+
+**Q: 自定义模型报错 "Shape mismatch"？**
+A: 这是深度学习中最常见的问题。请仔细检查 Model Builder 中每一层的参数，特别是 `Linear` 层的输入输出维度。对于 MNIST，输入图片大小为 28x28，`Flatten` 后是 784。
+
+**Q: 页面提示 "Network Error"？**
+A: 请检查后端 `server.py` 是否正在运行，且端口 `8000` 未被防火墙拦截。
+
 ## 贡献与联系
 
 欢迎提 Issue / PR。你可以先从修复文档、补充测试用例或完善后端实现开始。

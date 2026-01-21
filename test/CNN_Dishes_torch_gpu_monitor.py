@@ -63,7 +63,7 @@ class DishesDataset(Dataset):
     def __getitem__(self, idx):
         return self.x[idx], self.y[idx]
 
-root_dir = r"e:\P.A.R.A\Project\ComprehensiveDesign\codes\Deepflows\data\dishes"
+root_dir = r"E:\P.A.R.A\Project\ComprehensiveDesign\codes\deepflows\data\dishes"
 print(f"Loading data from {root_dir}...")
 # Same parameters as the DeepFlows script
 img_size = (32, 32)

@@ -1,0 +1,21 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#409eff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#36cfc9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景圆角矩形 (可选，为了让 Favicon 在浅色/深色背景都清晰) -->
+  <rect x="0" y="0" width="256" height="256" rx="64" fill="#001529" />
+
+  <!-- 图标主体: 简化的双流线 (与 Layout 中的 Logo 呼应) -->
+  <!-- 上方的粗流线 -->
+  <path d="M48,160 C96,64 160,64 208,160" fill="none" stroke="url(#logoGradient)" stroke-width="24" stroke-linecap="round" />
+  
+  <!-- 下方的细流线 (半透明) -->
+  <path d="M48,192 C96,96 160,96 208,192" fill="none" stroke="url(#logoGradient)" stroke-width="16" stroke-linecap="round" opacity="0.6" />
+
+  <!-- 中间加一个神经元节点，点缀科技感 -->
+  <circle cx="128" cy="112" r="16" fill="#fff" />
+</svg>

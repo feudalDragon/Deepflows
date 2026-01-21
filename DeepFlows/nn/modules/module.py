@@ -1,4 +1,5 @@
 import itertools
+import numpy as np
 from collections import OrderedDict
 from copy import deepcopy
 from ..parameter import Parameter
@@ -466,6 +467,79 @@ class Module:
         local_name_params = itertools.chain(self._parameters.items(), persistent_buffers.items())
         local_state = {k: v for k, v in local_name_params if v is not None}
         return local_state
+
+    def load_state_dict(self, state_dict: Dict[str, Any], strict: bool = True):
+        r"""Copies parameters and buffers from :attr:`state_dict` into this module and its descendants.
+        """
+        missing_keys = []
+        unexpected_keys = list(state_dict.keys())
+        
+        def load(module, prefix=''):
+            # Load parameters
+            for name, param in module._parameters.items():
+                if param is None:
+                    continue
+                key = prefix + name
+                if key in state_dict:
+                    input_param = state_dict[key]
+                    
+                    # Update parameter data
+                    if isinstance(input_param, (np.ndarray, list)):
+                        # Create new BackendTensor on the correct device
+                        new_data = backend_api.Btensor(input_param, device=param.device, dtype=param.dtype)
+                        param.data = new_data
+                    elif isinstance(input_param, Tensor):
+                         param.data = input_param.data
+                    elif hasattr(input_param, 'numpy'): # Handle other tensor-like objects
+                         new_data = backend_api.Btensor(input_param.numpy(), device=param.device, dtype=param.dtype)
+                         param.data = new_data
+                    
+                    if key in unexpected_keys:
+                        unexpected_keys.remove(key)
+                else:
+                    missing_keys.append(key)
+            
+            # Load buffers
+            for name, buf in module._buffers.items():
+                if buf is None:
+                    continue
+                key = prefix + name
+                if key in state_dict:
+                    input_buf = state_dict[key]
+                    if isinstance(input_buf, (np.ndarray, list)):
+                         new_data = backend_api.Btensor(input_buf, device=buf.device, dtype=buf.dtype)
+                         buf.data = new_data
+                    elif isinstance(input_buf, Tensor):
+                         buf.data = input_buf.data
+                    elif hasattr(input_buf, 'numpy'):
+                         new_data = backend_api.Btensor(input_buf.numpy(), device=buf.device, dtype=buf.dtype)
+                         buf.data = new_data
+                    
+                    if key in unexpected_keys:
+                        unexpected_keys.remove(key)
+                else:
+                    missing_keys.append(key)
+            
+            # Recurse
+            for name, child in module._modules.items():
+                if child is not None:
+                    load(child, prefix + name + '.')
+        
+        load(self)
+        
+        if strict:
+            error_msgs = []
+            if len(unexpected_keys) > 0:
+                error_msgs.append('Unexpected key(s) in state_dict: {}.'.format(', '.join(unexpected_keys)))
+            if len(missing_keys) > 0:
+                 error_msgs.append('Missing key(s) in state_dict: {}.'.format(', '.join(missing_keys)))
+            if len(error_msgs) > 0:
+                raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+                                   self.__class__.__name__, "\n\t".join(error_msgs)))
+
+    def load_weights(self, weights: Dict[str, Any]):
+        """Alias for load_state_dict to support pretrained_models.py"""
+        self.load_state_dict(weights, strict=False)
 
     def _named_members(self, get_members_fn, prefix='', recurse=True, remove_duplicate: bool = True):
         r"""Help yield various names + members of modules."""

@@ -5,6 +5,7 @@ from ..nn.modules.module import Module
 from ..optim.optimier import Optimizer
 from ..tensor import Tensor
 from .. import backend_api
+from ..backend_selection import default_device
 
 # 尝试导入dill库，若不可用则使用pickle
 try:
